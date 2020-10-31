@@ -10,6 +10,31 @@ import (
 func echo(conn net.Conn) {
 	defer conn.Close()
 
+	b := make([]byte, 512)
+	for {
+		size, err := conn.Read(b[0:])
+		if err != nil && err != io.EOF {
+			log.Println("Unexpected error")
+			break
+		}
+
+		if err == io.EOF && size == 0 {
+			log.Println("Client disconnected")
+			break
+		}
+
+		log.Printf("Received %d bytes: %s", size, string(b[0:size-2]))
+
+		log.Println("Writing data")
+		if _, err := conn.Write(b[0:size]); err != nil {
+			log.Fatalln("Unable to write data")
+		}
+	}
+}
+
+func echobuf(conn net.Conn) {
+	defer conn.Close()
+
 	reader := bufio.NewReader(conn)
 	writer := bufio.NewWriter(conn)
 
@@ -51,6 +76,10 @@ func main() {
 			log.Fatalln("Unable to accept connection")
 		}
 		// Handle the connection. Using goroutine for concurrency.
-		go echo(conn)
+		if true {
+			go echo(conn)
+		} else {
+			go echobuf(conn)
+		}
 	}
 }
