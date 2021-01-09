@@ -28,16 +28,16 @@ func echo(conn net.Conn) {
 	for {
 		size, err := conn.Read(b[0:])
 		if err != nil && err != io.EOF {
-			log.Println("Unexpected error")
+			log.Printf("Unexpected error %s\n", err.Error())
 			break
 		}
 
 		if err == io.EOF && size == 0 {
-			log.Println("Client disconnected")
+			log.Printf("Client %s disconnected\n", conn.RemoteAddr().String())
 			break
 		}
 
-		log.Printf("Received %d bytes: %s", size, string(b[0:size-2]))
+		log.Printf("Received %d bytes %s", size, string(b))
 
 		log.Println("Writing data")
 		if _, err := conn.Write(b[0:size]); err != nil {
@@ -55,12 +55,12 @@ func echobuf(conn net.Conn) {
 	for {
 		s, err := reader.ReadString('\n')
 		if err != nil && err != io.EOF {
-			log.Println("Unexpected error")
+			log.Printf("Unexpected error %s\n", err.Error())
 			break
 		}
 
 		if err == io.EOF && len(s) == 0 {
-			log.Println("Client disconnected")
+			log.Printf("Client %s disconnected\n", conn.RemoteAddr().String())
 			break
 		}
 
@@ -90,7 +90,7 @@ func main() {
 	}
 	for {
 		conn, err := listener.Accept()
-		log.Println("Recieved connection")
+		log.Printf("Recieved connection from: %s\n", conn.RemoteAddr().String())
 		if err != nil {
 			log.Fatalln("Unable to accept connection")
 		}
