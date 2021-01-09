@@ -2,10 +2,24 @@ package main
 
 import (
 	"bufio"
+	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net"
 )
+
+var (
+	useEchoBuf       bool
+	ListeningAddress string
+	ListeningPort    int
+)
+
+func init() {
+	flag.BoolVar(&useEchoBuf, "use-buf", false, "using buffering IO")
+	flag.StringVar(&ListeningAddress, "listen-address", "0.0.0.0", "listening address")
+	flag.IntVar(&ListeningPort, "listen-port", 10500, "listening port")
+}
 
 func echo(conn net.Conn) {
 	defer conn.Close()
@@ -62,24 +76,29 @@ func echobuf(conn net.Conn) {
 }
 
 func main() {
-	// Bind to TCP port 20080 on all interfaces.
-	listener, err := net.Listen("tcp", ":20080")
+	flag.Parse()
+
+	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", ListeningAddress, ListeningPort))
 	if err != nil {
 		log.Fatalln("Unable to bind to port")
 	}
-	log.Println("Listening on 0.0.0.0:20080")
+	log.Printf("Listening on %s:%d\n", ListeningAddress, ListeningPort)
+	if useEchoBuf {
+		log.Println("Using buffering IO...")
+	} else {
+		log.Println("Using unbuffering IO...")
+	}
 	for {
-		// Wait for connection. Create net.Conn on connection established.
 		conn, err := listener.Accept()
-		log.Println("Received connection")
+		log.Println("Recieved connection")
 		if err != nil {
 			log.Fatalln("Unable to accept connection")
 		}
-		// Handle the connection. Using goroutine for concurrency.
-		if true {
-			go echo(conn)
+
+		if useEchoBuf {
+			echobuf(conn)
 		} else {
-			go echobuf(conn)
+			go echo(conn)
 		}
 	}
 }
