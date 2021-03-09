@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcpechosrv-example
+  labels:
+    app: tcpechosrv
+spec:
+  selector:
+    matchLabels:
+      app: tcpechosrv
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: tcpechosrv
+    spec:
+      containers:
+        - name: app
+          image: tcpechosrv:v0.2
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 10500
