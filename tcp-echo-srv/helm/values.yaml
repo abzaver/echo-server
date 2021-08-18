@@ -1,0 +1,7 @@
+environment: development
+container:
+  name: tcp-echo-server
+  port: 10500
+  image: abzaver/tcpechosrv:v0.2
+  tag: hello
+replicas: 1
