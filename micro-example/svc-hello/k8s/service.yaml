@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: svc-hello
+  name: svc-hello
+  namespace: svc-hello-ns
+spec:
+  ports:
+  - nodePort: 31670
+    port: 8890
+    protocol: TCP
+    targetPort: 8890
+  selector:
+    app: svc-hello
+  type: NodePort

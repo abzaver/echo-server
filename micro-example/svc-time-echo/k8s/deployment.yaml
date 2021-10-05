@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: svc-time-echo-ns
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-time-echo
+  namespace: svc-time-echo-ns
+  labels:
+    app: svc-time-echo
+spec:
+  selector:
+    matchLabels:
+      app: svc-time-echo
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      namespace: svc-time-echo-ns
+      labels:
+        app: svc-time-echo
+    spec:
+      containers:
+        - name: svc-time-echo
+          image: svc-time-echo:0.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8891
