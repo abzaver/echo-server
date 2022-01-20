@@ -25,7 +25,21 @@ spec:
     spec:
       containers:
         - name: svc-time-echo
-          image: svc-time-echo:0.0.1
+          image: svc-time-echo:0.0.2
           imagePullPolicy: Never
           ports:
             - containerPort: 8891
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8891
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            exec:
+              command:
+              - busybox
+              - cat
+              - /tmp/healthy
+            initialDelaySeconds: 20
+            periodSeconds: 15
