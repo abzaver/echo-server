@@ -25,16 +25,29 @@ spec:
     spec:
       containers:
         - name: svc-hello
-          image: svc-hello:0.0.1
-          imagePullPolicy: Never
+          image: abzaver/svc-hello:0.0.1
+          imagePullPolicy: Always
           ports:
             - containerPort: 8890
           env:
-            - name: SVC_TIME_ECHO_URL
-              value: http://svc-time-echo.svc-time-echo-ns.svc.cluster.local:8891
+            - name: MAGIC_WORD
+              valueFrom:
+                secretKeyRef:
+                  name: svc-hello-secret
+                  key: magicWord          
+          envFrom:
+            - configMapRef:
+                name: svc-hello-config
           livenessProbe:
             httpGet:
               path: /healthz
               port: 8890
             initialDelaySeconds: 3
             periodSeconds: 3
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"

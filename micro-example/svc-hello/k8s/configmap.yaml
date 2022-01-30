@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: svc-hello-config
+  namespace: svc-hello-ns
+data:
+  GREETING: Hola
+  SVC_TIME_ECHO_URL: http://svc-time-echo.svc-time-echo-ns.svc.cluster.local:8891

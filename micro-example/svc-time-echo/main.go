@@ -35,7 +35,7 @@ func main() {
 
 	// Channel to listen for interrupt or terminate signals from the OS
 	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	// Goroutine to start the server
 	go func() {
@@ -44,6 +44,7 @@ func main() {
 		}
 	}()
 
+	// Readiness probe
 	if _, err := os.Stat("/tmp"); os.IsNotExist(err) {
 		if err = os.MkdirAll("/tmp", 0666); err != nil {
 			slog.Error("Can't create temporary directory for health check file. ", slog.String("error", err.Error()))
@@ -56,6 +57,7 @@ func main() {
 	}
 	f.Close()
 	defer os.Remove(f.Name())
+
 	slog.Info("Server is ready to handle requests at 0.0.0.0:8891")
 
 	// Blocking main goroutine until an OS signal is received
