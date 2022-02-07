@@ -28,12 +28,18 @@ func helloHandler(w http.ResponseWriter, _ *http.Request, svcTimeEchoENVVAR stri
 	svcTimeEchoResp, err := http.DefaultClient.Get(svcTimeEchoURL)
 
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "Service TimeEcho (%s) is not available: %v", svcTimeEchoURL, err)
+		http.Error(w, fmt.Sprintf("Service TimeEcho (%s) is not available: %v", svcTimeEchoURL, err), http.StatusInternalServerError)
+		slog.Error("Error calling TimeEcho service", slog.String("url", svcTimeEchoURL), slog.String("error", err.Error()))
 		return
 	}
 	defer svcTimeEchoResp.Body.Close()
-	respTime, _ := io.ReadAll(svcTimeEchoResp.Body)
+	respTime, err := io.ReadAll(svcTimeEchoResp.Body)
+	if err != nil {
+		http.Error(w, "Error reading TimeEcho response", http.StatusInternalServerError)
+		slog.Error("Error reading response body", slog.String("error", err.Error()))
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "%s at %s", greetingPrefix, string(respTime))
 
