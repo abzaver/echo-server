@@ -1,3 +1,4 @@
+// Concrete state
 package main
 
 import "fmt"
