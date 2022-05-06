@@ -10,7 +10,7 @@ type HasItemState struct {
 func (i *HasItemState) requestItem() error {
 	if i.vendingMachine.itemCount == 0 {
 		i.vendingMachine.setState(i.vendingMachine.noItem)
-		return fmt.Errorf("No item present")
+		return fmt.Errorf("no item present")
 	}
 	fmt.Printf("Item requestd\n")
 	i.vendingMachine.setState(i.vendingMachine.itemRequested)
@@ -24,8 +24,8 @@ func (i *HasItemState) addItem(count int) error {
 }
 
 func (i *HasItemState) insertMoney(money int) error {
-	return fmt.Errorf("Please select item first")
+	return fmt.Errorf("please select item first")
 }
 func (i *HasItemState) dispenseItem() error {
-	return fmt.Errorf("Please select item first")
+	return fmt.Errorf("please select item first")
 }

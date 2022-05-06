@@ -8,7 +8,7 @@ type NoItemState struct {
 }
 
 func (i *NoItemState) requestItem() error {
-	return fmt.Errorf("Item out of stock")
+	return fmt.Errorf("item out of stock")
 }
 
 func (i *NoItemState) addItem(count int) error {
@@ -18,8 +18,8 @@ func (i *NoItemState) addItem(count int) error {
 }
 
 func (i *NoItemState) insertMoney(money int) error {
-	return fmt.Errorf("Item out of stock")
+	return fmt.Errorf("item out of stock")
 }
 func (i *NoItemState) dispenseItem() error {
-	return fmt.Errorf("Item out of stock")
+	return fmt.Errorf("item out of stock")
 }
