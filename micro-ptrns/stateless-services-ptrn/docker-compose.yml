@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
