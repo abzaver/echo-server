@@ -17,5 +17,5 @@ RUN CGO_ENABLED=0 go build -o /bin/order-service
 FROM scratch
 COPY --from=build /bin/order-service /bin/order-service
 
-EXPOSE 8000
+EXPOSE 8001
 ENTRYPOINT ["/bin/order-service"]
