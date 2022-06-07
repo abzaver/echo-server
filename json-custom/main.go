@@ -22,9 +22,10 @@ type TickerData struct {
 
 // Ticker holds the ticker data from JSON
 type Ticker struct {
-	Open string  `json:"open"`
+	Open int     `json:"open"`
 	Last float64 `json:"last"`
-	Vol  string  `json:"vol"`
+	Past int64   `json:"past"`
+	Vol  int     `json:"vol"`
 }
 
 // Custom UnmarshalJSON for the Ticker struct
@@ -77,9 +78,10 @@ func main() {
 		"data": {
 			"date": 1513865441609,
 			"ticker": {
-				"open": "10",
+				"open": 10,
 				"last": "10.15456456",
-				"vol": "110"
+				"past": 21315456456,
+				"vol": 110
 			}
 		},
 		"message" : "Ok"
@@ -95,6 +97,7 @@ func main() {
 	fmt.Println("Date:", response.Data.Date)
 	fmt.Println("Ticker Open:", response.Data.Ticker.Open)
 	fmt.Println("Ticker Last:", response.Data.Ticker.Last)
+	fmt.Println("Ticker Past:", response.Data.Ticker.Past)
 	fmt.Println("Ticker Vol:", response.Data.Ticker.Vol)
 	fmt.Println("Message:", response.Message)
 }
