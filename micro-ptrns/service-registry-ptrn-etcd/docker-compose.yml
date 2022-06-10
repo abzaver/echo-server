@@ -8,7 +8,7 @@ services:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
     networks:
-      - mynetwork
+      - service-registry-ptrn-etcd-network
 
   user-service:
     build:
@@ -21,7 +21,7 @@ services:
     environment:
       - ETCD_ENDPOINT=http://etcd:2379
     networks:
-      - mynetwork
+      - service-registry-ptrn-etcd-network
 
   order-service:
     build:
@@ -34,8 +34,9 @@ services:
     environment:
       - ETCD_ENDPOINT=http://etcd:2379
     networks:
-      - mynetwork
+      - service-registry-ptrn-etcd-network
 
 networks:
-  mynetwork:
+  service-registry-ptrn-etcd-network:
     driver: bridge
+    external: true
